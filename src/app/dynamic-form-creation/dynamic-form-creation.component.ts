@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { Validators } from "@angular/forms";
 import { FormBuilder, FormGroup, FormControl, FormArray } from '@angular/forms';
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { DynamicFormService } from "../dynamic-form-service";
 import { DynamicForm } from "../dynamicForm";
 import { DynamicFormData } from "../dynamicFormData";
@@ -23,9 +23,66 @@ export class DynamicFormCreationComponent implements OnInit {
   specifyLength: boolean = false;
   enableFormDesign: boolean = false;
   temp :any={};
-  /*temp = { "name": "Contact Us", "fields": [{ "label": "Name", "name": "Name", "id": "name", "type": "text", "validation": { "isMandatory": true, "stringType": "alpha", "specifyLength": false } }, { "label": "Age", "name": "Age", "id": "age", "type": "number", "validation": { "isMandatory": true, "minInclusive": 1, "maxInclusive": 20, "specifyLength": true } }, { "label": "City", "name": "City", "id": "city", "type": "select", "values": ["Chennai", "Bangalore", "Coimbatore", "Mumbai"], "validation": { "isMandatory": true, "isMultiSelection": false, "specifyLength": false } }, { "label": "Email", "name": "Email", "id": "email", "type": "email", "validation": { "isMandatory": true, "specifyLength": false } }] };
+  /*temp = {
+    "name": "Contact Us",
+    "fields": [
+        {
+            "label": "Name",
+            "name": "Name",
+            "id": "name",
+            "type": "text",
+            "values":[],
+            "validation": {
+                "isMandatory": true,
+                "stringType": "alpha",
+                "specifyLength": false
+            }
+        },
+        {
+            "label": "Age",
+            "name": "Age",
+            "id": "age",
+            "type": "number",
+            "values":[],
+            "validation": {
+                "isMandatory": true,
+                "minInclusive": 1,
+                "maxInclusive": 20,
+                "specifyLength": true
+            }
+        },
+        {
+            "label": "City",
+            "name": "City",
+            "id": "city",
+            "type": "select",
+            "values": [
+                "Chennai",
+                "Bangalore",
+                "Coimbatore",
+                "Mumbai"
+            ],
+            "validation": {
+                "isMandatory": true,
+                "isMultiSelection": false,
+                "specifyLength": false
+            }
+        },
+        {
+            "label": "Email",
+            "name": "Email",
+            "id": "email",
+            "type": "email",
+            "values":[],
+            "validation": {
+                "isMandatory": true,
+                "specifyLength": false
+            }
+        }
+    ]
+};
 
-  temp1 = {
+  /*temp1 = {
     "name": "Contact Us",
     fields: [{
       label: "Name",
@@ -89,7 +146,7 @@ export class DynamicFormCreationComponent implements OnInit {
 
 
 
-  constructor(private router: Router, private dynamicFormService: DynamicFormService) {
+  constructor(private router: Router, private activatedRoute:ActivatedRoute,private dynamicFormService: DynamicFormService) {
 
     this.dynamicFormService.getDynamicForm("contact us").subscribe(data => {
       
@@ -324,5 +381,9 @@ export class DynamicFormCreationComponent implements OnInit {
 
 
     });
+  }
+  onCancelClick(){
+    this.router.navigate(['/dynamicform']);
+    this.toggleScreen();
   }
 }

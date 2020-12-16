@@ -35,7 +35,7 @@ export class DynamicFormService {
   }
 
   getDynamicForm(formName: string): Observable<any> {
-    return this.http.get(`${this.baseUrl}`+`formdesign`+`/${formName}`,{headers:this.c});
+    return this.http.get(`${this.baseUrl}`+`formdesign`+`/`+encodeURIComponent(`${formName}`),{headers:this.c});
   }
 
   getDynamicFormDataList(): Observable<any> {

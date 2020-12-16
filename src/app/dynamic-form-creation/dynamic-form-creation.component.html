@@ -1,75 +1,104 @@
 <div *ngIf="!enableFormDesign">
-  <h4 style="align-items: center"> {{temp.name}} </h4>
-  <button type="button" style="float: right;" class="btn btn-success" (click)="toggleScreen()">Design Form</button>
-  <form [formGroup]="dynamicFormm" (ngSubmit)="onSubmit()" novalidate>
-    <ng-container *ngFor="let controls of fields">
-      {{controls.label}}
-      <input [type]="controls.type" [formControlName]="controls.label" />
-      <ng-container *ngFor="let validation of controls.validations">
-        <span *ngIf="dynamicForm.controls[controls.label].touched && dynamicForm.controls[controls.label].errors">
-          <p *ngIf="dynamicForm.controls[controls.label].errors[validation.name]">
-            {{validation.message}}
-          </p>
-        </span>
-      </ng-container>
-      <br>
-    </ng-container>
-    <br>
-    <!-- <input  [disabled]="dynamicFormm.valid" type="submit" [disabled]="!dynamicForm.valid" /> -->
-  </form>
-
-  <form [formGroup]="dynamicFormm" (ngSubmit)="onSubmit()" novalidate>
-    <div class="row col-md-12" *ngFor="let element of temp.fields">
-      <div class="col-md-1"> {{element.label}} :</div>
-      <div class="col-md-4">
-        <input [type]="element.type" *ngIf="!element.values.length>0" [formControlName]="element.label" />
-        <select [formControlName]="element.label"
-          *ngIf="element.values.length>0 && !element.validation.isMultiSelection">
-          <option value="undefined" selected disabled>--Select City--</option>
-          <option [value]="opt" *ngFor="let opt of element.values">{{opt}}</option>
-        </select>
-        <select multiple [formControlName]="element.label"
-          *ngIf="element.values.length>0 && element.validation.isMultiSelection">
-          <option value="undefined" selected disabled>--Select City--</option>
-          <option [value]="opt" *ngFor="let opt of element.values">{{opt}}</option>
-        </select>
-      </div>
-      <ng-container *ngFor="let validation of element.validations">
-        <span *ngIf="dynamicFormm.controls[element.label].touched && dynamicFormm.controls[element.label].errors">
-          <p *ngIf="dynamicFormm.controls[element.label].errors[element.name]">
-            not valid
-          </p>
-        </span>
-      </ng-container>
-      <br>
+  <div class="row">
+    <div class="col-md-10">
+      <h4 style="text-align: center"> {{temp.name}} </h4>
     </div>
-    <button type="submit" class="btn btn-success" [disabled]="!dynamicFormm.valid">Submit</button>
+    <div class="col-md-2">
+      <button type="button" style="float: right;" class="btn btn-primary" (click)="toggleScreen()">Configure
+        Form</button>
+    </div>
+  </div>
+  <div class="jumbotron mt-2">
+    <form [formGroup]="dynamicFormm" (ngSubmit)="onSubmit()" novalidate>
+      <ng-container *ngFor="let controls of fields">
+        {{controls.label}}
+        <input [type]="controls.type" [formControlName]="controls.label" />
+       
+        <br>
+      </ng-container>
+      <br>
+      <!-- <input  [disabled]="dynamicFormm.valid" type="submit" [disabled]="!dynamicForm.valid" /> -->
+   
 
-  </form>
+    
+      <div class="row col-md-12" *ngFor="let element of temp.fields">
+        <div class="col-md-2" style="text-transform: capitalize;"> {{element.label}} :</div>
+        <div class="col-md-4">
+          <input [type]="element.type" *ngIf="!element.values.length>0" [formControlName]="element.label" />
+          <select style="width: 59% !important;" [formControlName]="element.label"
+            *ngIf="element.values.length>0 && !element.validation.isMultiSelection">
+            <option value="undefined" selected disabled>--Select City--</option>
+            <option [value]="opt" *ngFor="let opt of element.values">{{opt}}</option>
+          </select>
+          <select style="width: 59% !important;" multiple [formControlName]="element.label"
+            *ngIf="element.values.length>0 && element.validation.isMultiSelection">
+            <option value="undefined" selected disabled>--Select City--</option>
+            <option [value]="opt" *ngFor="let opt of element.values">{{opt}}</option>
+          </select>
+        </div>
+        <br>
+        <ng-container *ngFor="let validation of element.validations">
+          <span *ngIf="dynamicFormm.controls[element.label].touched && dynamicFormm.controls[element.label].errors">
+            <p *ngIf="dynamicFormm.controls[element.label].errors[element.name]">
+              not valid
+            </p>
+          </span>
+        </ng-container>
+        <br>
+      </div>
+      <div class="row">
+        <div class="col-md-2">
+        </div>
+        <div class="col-md-4">
+          <button type="submit" class="btn btn-success" [disabled]="!dynamicFormm.valid">Submit</button>&nbsp;
+          <button type="reset" class="btn btn-info">Cancel</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="row mt-4" *ngIf="formDataArr.length>0">
+    <div class="col-md-12">
+      <b>
+        <h4><label for="sumbittedFormlist">Form Submission List</label></h4>
+      </b>
+      <table border="1">
+        <tr>
+          <th>S.No
+          </th>
+          <th> Timestamp
+          </th>
+          <th>
+            Form Data
+          </th>
+        </tr>
+        <tr *ngFor="let formData of formDataArr;index as i">
+          <td>{{i+1}}</td>
+          <td> {{formData.createdDate | customDate }} </td>
+          <td> {{formData.formData |json}} </td>
+        </tr>
+      </table>
+   </div>
+  </div>
+
 
 </div>
 <div *ngIf="enableFormDesign">
-  
-
-  <button type="button" style="float: right;" class="btn btn-success" (click)="toggleScreen()">Contact Us</button>
-  <br>
-  <h4 style="align-items: center"> {{"Design "+temp.name+" Form"}} </h4>
+  <h4 style="text-align: center"> {{"Configure "+temp.name+" Form"}} </h4>
   <div class="container">
-    <div *ngFor="let d of temp.fields;index as i">
-
-
+    <div *ngFor="let d of temp.fields;index as i" class="jumbotron">
       <div class="row">
-
       </div>
       <div class="row">
         <div class="col-md-2">
           <!-- <label for="label+{{i}}">{{d.id+" : "}}</label> -->
+          <b for="fieldName">Field Name :</b>
           <input name="name+{{i}}" type="text" [value]="" [(ngModel)]="d.name" placeholder="enter the value" />
         </div>
         <div class="col-md-1">
-
         </div>
         <div class="col-md-2">
+          <b for="selectType">Select Type :</b>
           <select name="controlType+{{i}}" id="controlType" [(ngModel)]="d.type"
             (change)="onChangeControlType($event.target.value)">
             <option value="undefined" selected disabled>--Select Control Type--</option>
@@ -80,6 +109,7 @@
 
         </div>
         <div class="col-md-2">
+          <b for="fieldLevel">Field Level :</b>
           <div>
             <input type="radio" [(ngModel)]="d.validation.isMandatory" [value]="true" name="isMandantory+{{i}}">
             <label for="isMandantory">Mandantory</label>
@@ -91,116 +121,83 @@
         </div>
 
         <div class="col-md-2">
+          <b for="fieldPattern">Field Pattern :</b>
           <select name="stringType+{{i}}" [(ngModel)]="d.validation.stringType"
             (change)="onChangeStringType($event.target.value)">
             <option value="undefined" selected disabled>Accepts all</option>
             <option [value]="opt" *ngFor="let opt of stringType">{{opt}}</option>
           </select>
         </div>
+       
+        <div class="col-md-2 mt-3">
+        
+      
+      <i style="font-size: 12px;" *ngIf="temp.fields.length ==i+1"  (click)="addFormControl()" class="fa fa-plus-circle btn btn-success" aria-hidden="true"></i> 
+         
 
-        <div class="col-md-2">
-          <button *ngIf="temp.fields.length ==i+1" type="button" (click)="addFormControl()">Add</button>
-          &nbsp;
-          <button type="button" (click)="deleteFormControlByName(d.name)">Delete</button>
+&nbsp;
+          
+            <i  style="font-size: 12px;" class="fa fa-trash btn btn-danger" (click)="deleteFormControlByName(d.name)" aria-hidden="true"></i>
+        
         </div>
       </div>
-
-
-      <div class="row">
+      <div class="row mt-3" *ngIf="!(d.type=='select')">
         <div class="col-md-2">
-
-
+          <b for="fieldLength">Field Length :</b>
           <div><input type="radio" [(ngModel)]="d.validation.specifyLength" [value]="true" name="specifyLength+{{i}}">
             <label for="length">Limit Length</label>
           </div>
-
-
           <div> <input type="radio" [(ngModel)]="d.validation.specifyLength" [value]="false" name="specifyLength+{{i}}">
             <label for="length">Not Required</label>
           </div>
-
         </div>
         <div class="col-md-1">
-
         </div>
+       
         <div class="col-md-2" *ngIf="d.validation.specifyLength">
-
+          <b for="minimumVal" *ngIf="d.validation.specifyLength">Minimum Value :</b>
           <input [(ngModel)]="d.validation.minInclusive" name="minInclusive+{{i}}" type="number"
-            placeholder="enter minimum length" />
+            placeholder="Minimum value" />
         </div>
         <div class="col-md-1">
-
         </div>
+
         <div class="col-md-2" *ngIf="d.validation.specifyLength">
-
+          <b for="maximumVal" *ngIf="d.validation.specifyLength">Maximum Value :</b>
           <input [(ngModel)]="d.validation.maxInclusive" name="maxInclusive+{{i}}" type="number"
-            placeholder="enter maximum length" />
-
+            placeholder="Maximum value" />
         </div>
-
       </div>
       <div class="row">
-
       </div>
-      <div class="row">
 
-      </div>
       <div class="row">
         <div class="col-md-2" *ngIf="d.type=='select'">
-
+          <b for="selectType">Select Type:</b>
           <div>
-            <input type="radio" [(ngModel)]="d.validation.isMultiSelection" [value]="false" name="isMultiSelection+{{i}}">
+            <input type="radio" [(ngModel)]="d.validation.isMultiSelection" [value]="false"
+              name="isMultiSelection+{{i}}">
             <label for="length">Single Selection</label>
           </div>
-
           <div>
-            <input type="radio" [(ngModel)]="d.validation.isMultiSelection" [value]="true" name="isMultiSelection+{{i}}">
-
+            <input type="radio" [(ngModel)]="d.validation.isMultiSelection" [value]="true"
+              name="isMultiSelection+{{i}}">
             <label for="length">Multi Selection</label>
           </div>
-          
         </div>
-
         <div class="col-md-1">
-
         </div>
         <div class="col-md-2" *ngIf="d.type=='select'">
+          <b for="selectOptions">Select Options:</b>
           <textarea (change)="onChangeDropdown(i,d.values)" rows="3" cols="24" [(ngModel)]="d.values"
             name="selectionValue+{{i}}" placeholder="enter dropdown list"></textarea>
         </div>
       </div>
       <div class="row">
-<hr>
+        <hr>
       </div>
-
-
     </div>
-
-    <button type="button" (click)="formDesign()">Submit</button>
+    <button class="btn btn-success" type="button" (click)="formDesign()">Submit</button>&nbsp;
+    <button type="button" (click)="onCancelClick()" class="btn btn-info">Cancel</button>
   </div>
 </div>
-
-
-
-
-    <table border="1">
-      <tr>
-        <td>S.No
-        </td>
-        <td> Timestamp
-</td>
-<td>
-  Form Data
-</td>
-                </tr>
-      <tr *ngFor="let formData of formDataArr;index as i">
-        <td>{{i+1}}</td>
-        <td> {{formData.createdDate | customDate }} </td>
-        <td> {{formData.formData |json}} </td>
-      
-      </tr>
-      
-      </table>
-
-
-
